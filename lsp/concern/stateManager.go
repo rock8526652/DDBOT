@@ -8,7 +8,7 @@ import (
 	"github.com/starskim/DDBOT/lsp/cfg"
 	"github.com/starskim/DDBOT/lsp/concern_type"
 	localutils "github.com/starskim/DDBOT/utils"
-	"github.com/starskim/MiraiGo-Template/utils"
+	"github.com/rock8526652/MiraiGo-Template/utils"
 	"github.com/sirupsen/logrus"
 	"github.com/tidwall/buntdb"
 	"go.uber.org/atomic"

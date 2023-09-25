@@ -2,7 +2,7 @@ package cfg
 
 import (
 	"errors"
-	"github.com/starskim/MiraiGo-Template/config"
+	"github.com/rock8526652/MiraiGo-Template/config"
 	"github.com/ghodss/yaml"
 	"github.com/spf13/cast"
 	"go.uber.org/atomic"
