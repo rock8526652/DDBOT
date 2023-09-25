@@ -5,7 +5,7 @@ import (
 	"github.com/Mrs4s/MiraiGo/message"
 	localutils "github.com/starskim/DDBOT/utils"
 	"github.com/starskim/DDBOT/utils/msgstringer"
-	"github.com/starskim/MiraiGo-Template/config"
+	"github.com/rock8526652/MiraiGo-Template/config"
 	rotatelogs "github.com/lestrrat-go/file-rotatelogs"
 	"github.com/rifflock/lfshook"
 	"github.com/sirupsen/logrus"
@@ -14,7 +14,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/starskim/MiraiGo-Template/bot"
+	"github.com/rock8526652/MiraiGo-Template/bot"
 )
 
 const moduleId = "ddbot.logging"

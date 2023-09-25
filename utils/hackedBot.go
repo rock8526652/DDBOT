@@ -2,7 +2,7 @@ package utils
 
 import (
 	"github.com/Mrs4s/MiraiGo/client"
-	miraiBot "github.com/starskim/MiraiGo-Template/bot"
+	miraiBot "github.com/rock8526652/MiraiGo-Template/bot"
 )
 
 // HackedBot 拦截一些方法方便测试
