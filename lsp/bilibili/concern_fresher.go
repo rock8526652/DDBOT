@@ -6,7 +6,7 @@ import (
 	"github.com/starskim/DDBOT/lsp/cfg"
 	"github.com/starskim/DDBOT/lsp/concern"
 	"github.com/starskim/DDBOT/lsp/concern_type"
-	"github.com/starskim/MiraiGo-Template/config"
+	"github.com/rock8526652/MiraiGo-Template/config"
 	"github.com/sirupsen/logrus"
 	"github.com/tidwall/buntdb"
 	"go.uber.org/atomic"

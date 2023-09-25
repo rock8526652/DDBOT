@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"github.com/starskim/DDBOT/proxy_pool"
 	"github.com/starskim/DDBOT/requests"
-	"github.com/starskim/MiraiGo-Template/config"
+	"github.com/rock8526652/MiraiGo-Template/config"
 	jsoniter "github.com/json-iterator/go"
 	"go.uber.org/atomic"
 	"strconv"

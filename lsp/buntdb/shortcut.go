@@ -2,7 +2,7 @@ package buntdb
 
 import (
 	"errors"
-	"github.com/starskim/MiraiGo-Template/utils"
+	"github.com/rock8526652/MiraiGo-Template/utils"
 	"github.com/modern-go/gls"
 	"github.com/tidwall/buntdb"
 	"strconv"

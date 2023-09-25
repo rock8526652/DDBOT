@@ -7,7 +7,7 @@ import (
 	"github.com/starskim/DDBOT/lsp/template"
 	localutils "github.com/starskim/DDBOT/utils"
 	"github.com/starskim/DDBOT/utils/blockCache"
-	"github.com/starskim/MiraiGo-Template/config"
+	"github.com/rock8526652/MiraiGo-Template/config"
 	"github.com/sirupsen/logrus"
 	"strings"
 	"sync"
