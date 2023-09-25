@@ -7,7 +7,7 @@ import (
 	"github.com/starskim/DDBOT/proxy_pool"
 	"github.com/starskim/DDBOT/requests"
 	localutils "github.com/starskim/DDBOT/utils"
-	"github.com/starskim/MiraiGo-Template/config"
+	"github.com/rock8526652/MiraiGo-Template/config"
 	"github.com/nobuf/cas"
 	"github.com/sirupsen/logrus"
 	"strings"
