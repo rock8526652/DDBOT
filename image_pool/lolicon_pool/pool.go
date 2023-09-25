@@ -4,7 +4,7 @@ import (
 	"container/list"
 	"fmt"
 	"github.com/starskim/DDBOT/image_pool"
-	"github.com/starskim/MiraiGo-Template/utils"
+	"github.com/rock8526652/MiraiGo-Template/utils"
 	"sync"
 	"time"
 )

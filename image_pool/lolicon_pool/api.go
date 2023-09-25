@@ -4,7 +4,7 @@ import (
 	"github.com/starskim/DDBOT/proxy_pool"
 	"github.com/starskim/DDBOT/requests"
 	"github.com/starskim/DDBOT/utils"
-	"github.com/starskim/MiraiGo-Template/config"
+	"github.com/rock8526652/MiraiGo-Template/config"
 	"time"
 )
 

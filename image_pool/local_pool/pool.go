@@ -4,7 +4,7 @@ import (
 	"errors"
 	"github.com/starskim/DDBOT/image_pool"
 	localutils "github.com/starskim/DDBOT/utils"
-	"github.com/starskim/MiraiGo-Template/utils"
+	"github.com/rock8526652/MiraiGo-Template/utils"
 	"io/ioutil"
 	"math/rand"
 	"os"

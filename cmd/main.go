@@ -15,7 +15,7 @@ import (
 	_ "github.com/starskim/DDBOT/lsp/youtube"
 	_ "github.com/starskim/DDBOT/msg-marker"
 	"github.com/starskim/DDBOT/warn"
-	"github.com/starskim/MiraiGo-Template/config"
+	"github.com/rock8526652/MiraiGo-Template/config"
 	"github.com/alecthomas/kong"
 	"net/http"
 	_ "net/http/pprof"
