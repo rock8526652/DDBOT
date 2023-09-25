@@ -5,7 +5,7 @@ import (
 	"github.com/Mrs4s/MiraiGo/client"
 	localdb "github.com/starskim/DDBOT/lsp/buntdb"
 	localutils "github.com/starskim/DDBOT/utils"
-	"github.com/starskim/MiraiGo-Template/utils"
+	"github.com/rock8526652/MiraiGo-Template/utils"
 	"github.com/sirupsen/logrus"
 	"github.com/tidwall/buntdb"
 	"strconv"
