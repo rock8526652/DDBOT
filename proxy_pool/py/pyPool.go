@@ -3,9 +3,10 @@ package py
 import (
 	"errors"
 	"fmt"
-	"github.com/starskim/DDBOT/proxy_pool"
-	"github.com/starskim/DDBOT/requests"
 	"net/http"
+
+	"github.com/rock8526652/DDBOT/proxy_pool"
+	"github.com/rock8526652/DDBOT/requests"
 )
 
 // ProxyPool is https://github.com/jhao104/proxy_pool
