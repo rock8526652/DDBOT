@@ -1,0 +1,681 @@
+syntax = "proto3";
+package bilibili;
+
+option go_package = "lsp/bilibili";
+
+enum LiveStatus {
+  NoLiving = 0;
+  Living = 1;
+}
+
+enum RoundStatus {
+  Off = 0;
+  On = 1;
+}
+
+enum RoomStatus {
+  NonExist = 0;
+  Exist = 1;
+}
+
+enum SpecialType {
+  Normal = 0;
+  Pay = 1;
+  YearFestival = 2;
+}
+
+enum DynamicDescType {
+  DynamicDescTypeUnknown = 0;
+  WithOrigin = 1;
+  WithImage = 2;
+  TextOnly = 4;
+  WithVideo = 8;
+  WithPost = 64;
+  WithMusic = 256;
+  WithAnime = 512;
+  // 该内容已经不见了哦
+  WithMiss = 1024;
+  // 评分、头像挂件，这种动态下面有一个小卡片的
+  WithSketch = 2048;
+  WithMovie = 4098;
+  // 电视剧、综艺
+  WithDrama = 4099;
+  // 4100去哪了捏
+  WithDocumentary = 4101;
+  WithLive = 4200;
+  // XXX的收藏夹，收藏夹居然也可以发动态？
+  WithMylist = 4300;
+  // (付费?)课程
+  WithCourse = 4302;
+  WithLiveV2 = 4308;
+}
+
+enum AddOnCardShowType {
+  AddOnCardShowTypeUnknown = 0;
+  // 商品
+  goods = 1;
+  // 相关游戏/作品/装扮
+  related = 2;
+  vote = 3;
+  // 比赛
+  match = 4;
+  // 视频
+  video = 5;
+  // 直播预约
+  reserve = 6;
+}
+
+message XSpaceAccInfoResponse {
+  int32 code = 1;
+  string message = 2;
+
+  message Data {
+    int64 mid = 1;
+    string name = 2;
+    int32 level = 7;
+    message LiveRoom {
+      RoomStatus roomStatus = 1;
+      LiveStatus liveStatus = 2;
+      string url = 3;
+      string title = 4;
+      string cover = 5;
+      int64 roomid = 6;
+      RoundStatus roundStatus = 7;
+    }
+    LiveRoom live_room = 17;
+  }
+  Data data = 3;
+}
+
+
+message FeedListResponse {
+  int32 code = 1;
+  string message = 2;
+  message Data {
+    int32 results = 1;
+    string page = 2;
+    string pagesize = 3;
+    message ListInfo {
+      string cover = 1;
+      string face = 2;
+      string uname = 3;
+      string title = 4;
+      int64 roomid = 5;
+      string pic = 6;
+      int64 online = 7;
+      string link = 8;
+      int64 uid = 9;
+      int64 parent_area_id = 10;
+      int64 area_id = 11;
+    }
+    repeated ListInfo list = 4;
+  }
+  Data data = 3;
+}
+
+message GetKeyRequest {
+  string appkey = 1;
+  string sign = 2;
+}
+
+message GetKeyResponse {
+  int64 ts = 1;
+  int32 code = 2;
+  message Data {
+    string hash = 1;
+    string key = 2;
+  }
+  Data data = 3;
+}
+
+message LoginRequest {
+  string appkey = 1;
+  int32 build = 2;
+  //  string captcha = 3;
+  //  string challenge = 4;
+  string channel = 5;
+  string device = 6;
+  //  string mobi_app = 7;
+  string password = 8;
+  string permission = 9;
+  string platform = 10;
+  // string seccode = 11;
+  int32 subid = 12;
+  int32 ts = 13;
+  string username = 14;
+  //  string validate = 15;
+}
+
+message LoginResponse {
+  int32 ts = 1;
+  int32 code = 2;
+  message Data {
+    message TokenInfo {
+      int64 mid = 1;
+      string access_token = 2;
+      string refresh_token = 3;
+      int64 expires_in = 4;
+    }
+    message CookieInfo {
+      message Cookie {
+        string name = 1;
+        string value = 2;
+        int32 http_only = 3;
+        int64 expires = 4;
+      }
+      repeated Cookie cookies = 1;
+      repeated string domains = 2;
+    }
+    int32 status = 1;
+    TokenInfo token_info = 2;
+    CookieInfo cookie_info = 3;
+    repeated string sso = 4;
+    string message = 5;
+    string url = 6;
+  }
+  Data data = 3;
+  string message = 4;
+}
+
+message XRelationStatResponse {
+  int32 code = 1;
+  string message = 2;
+  message Data {
+    int64 mid = 1;
+    int64 following = 2;
+    int64 follower = 3;
+  }
+  Data data = 3;
+}
+
+message Card {
+  message Desc {
+    message UserProfile {
+      message Info {
+        int64 uid = 1;
+        string uname = 2;
+        string face = 3;
+      }
+      Info info = 1;
+    }
+    int64 dynamic_id = 1;
+    int64 orig_dy_id = 2;
+    DynamicDescType orig_type = 3;
+    int64 pre_dy_id = 4;
+    int32 comment = 5;
+    int32 like = 6;
+    int32 view = 7;
+    int32 repost = 8;
+    int64 timestamp = 9;
+    DynamicDescType type = 10;
+    string bvid = 11;
+    string dynamic_id_str = 12;
+    int64 uid = 13;
+    UserProfile user_profile = 14;
+    string pre_dy_id_str = 15;
+    string orig_dy_id_str = 16;
+    string rid_str = 17;
+  }
+  message Extra {
+    int32 is_space_top = 1;
+  }
+  message Display {
+    message EmojiInfo {
+      message EmojiDetail {
+        string emoji_name = 1;
+        int32 id = 2;
+        int32 package_id = 3;
+        int32 state = 4;
+        int32 type = 5;
+        string text = 6;
+        string url = 7;
+        message Meta {
+          int32 size = 1;
+        }
+        Meta meta = 8;
+        int64 mtime = 9;
+      }
+      repeated EmojiDetail emoji_details = 1;
+    }
+    message LikeInfo {
+      message LikeUser {
+        int64 uid = 1;
+        string name = 2;
+      }
+      string display_text = 1;
+      repeated LikeUser like_users = 2;
+    }
+    // 动态下面附加一个信息
+    message AddOnCardInfo {
+      // 附加预约信息
+      message ReserveAttachCard {
+        // 预约种类 reserve
+        string type = 1;
+        // 预约标题
+        string title = 2;
+        int64 state = 3;
+        // 已经有多少人预约了
+        int64 reserve_total = 4;
+        message DescFirst {
+          string text = 1;
+          int64 style = 2;
+        }
+        // 显示在上面的部分
+        DescFirst desc_first = 5;
+        // 显示在下面的部分
+        string desc_second = 6;
+        string oid_str = 7;
+        int64 origin_state = 8;
+        int64 stype = 9;
+        int64 livePlanStartTime = 10;
+        // 预约抽奖
+        message ReserveLottery {
+          // 抽奖的那个礼物图标
+          string icon = 1;
+          string text = 2;
+          string jump_url = 3;
+          int64 lottery_type = 4;
+          string share_icon = 5;
+        }
+        ReserveLottery reserve_lottery = 11;
+        bool show_desc_second = 14;
+      }
+      message AttachCard {
+        string type = 1;
+        string head_text = 2;
+        string cover_url = 3;
+        int32 cover_type = 4;
+        string title = 5;
+        string desc_first = 6;
+        string desc_second = 7;
+        string jump_url = 8;
+        string oid_str = 9;
+      }
+      // 可能分为文字投票和图片投票两种，遇到再说
+      message TextVoteCard {
+        int32 choice_cnt = 1;
+        int32 default_share = 2;
+        string default_text = 3;
+        string desc = 4;
+        int64 endtime = 5;
+        int64 join_num = 6;
+        message TextVoteOption {
+          string btn_str = 1;
+          int32 cnt = 2;
+          string desc = 3;
+          int32 idx = 4;
+          string title = 5;
+          string img_url = 6;
+        }
+        repeated TextVoteOption options = 7;
+        int64 status = 8;
+        int64 type = 9;
+        int64 uid = 10;
+        int64 vote_id = 11;
+      }
+      message UgcAttachCard {
+        string type = 1; // ugc
+        string head_text = 2;
+        string title = 3;
+        string image_url = 4;
+        string desc_second = 5;
+        string play_url = 6;
+        string duration = 7;
+        bool multi_line = 8;
+        string oid_str = 9;
+      }
+      message GoodsCard {
+        message ListItem {
+          // UP主的推荐
+          string adMark = 1;
+          string appName = 2;
+          string brief = 3;
+          // descTags = 4; 目前格式未知
+          int64 dynamicId = 5;
+          string iconName = 6;
+          string iconUrl = 7;
+          int64 id = 8;
+          string img = 9; // 这个是头图
+          string itemIdStr = 10;
+          int64 itemsId = 11;
+          string jumpLink = 12;
+          string jumpLinkDesc = 13;
+          string msource = 14;
+          string name = 15;
+          string oriPrice = 16;
+          int64 outerId = 17;
+          float price = 18;
+          string priceStr = 19;
+          string schemaPackageName = 20;
+          string schemaUrl = 21;
+          int32 shopGoodType = 22;
+          int32 sourceType = 23;
+          int32 type = 24;
+          bool useAdWebV2 = 25;
+          string wordJumpLinkDesc = 26;
+        }
+        repeated ListItem list = 1;
+      }
+      AddOnCardShowType add_on_card_show_type = 1;
+      ReserveAttachCard reserve_attach_card = 2;
+      AttachCard attach_card = 3;
+      string vote_card = 4;
+      UgcAttachCard ugc_attach_card = 5;
+      string goods_card = 6;
+    }
+    message Origin {
+      EmojiInfo emoji_info = 1;
+      LikeInfo like_info = 2;
+      Origin origin = 3;
+      repeated AddOnCardInfo add_on_card_info = 4;
+      string usr_action_txt = 5;
+    }
+    EmojiInfo emoji_info = 1;
+    LikeInfo like_info = 2;
+    Origin origin = 3;
+    // 可能是新增的功能，会在动态下面加一个小卡片，目前如预约直播显示信息，发起投票的投票内容缩略，游戏官方动态下面的相关游戏
+    repeated AddOnCardInfo add_on_card_info = 4;
+    string usr_action_txt = 5;
+  }
+  string card = 1;
+  Desc desc = 2;
+  Extra extra = 5;
+  Display display = 6;
+}
+
+
+message DynamicSvrSpaceHistoryResponse {
+  int32 code = 1;
+  string message = 2;
+  message Data {
+    repeated Card cards = 1;
+    int32 has_more = 2;
+    int64 next_offset = 3;
+  }
+  Data data = 3;
+}
+
+message DynamicSvrDynamicNewResponse {
+  int32 code = 1;
+  string message = 2;
+  message Data {
+    int32 new_num = 1;
+    int32 exist_gap = 2;
+    int32 update_num = 3;
+    int32 open_rcmd = 4;
+    repeated Card cards = 5;
+    int64 max_dynamic_id = 6;
+    int64 history_offset = 7;
+  }
+  Data data = 3;
+}
+
+message DynamicSvrDynamicHistoryResponse {
+  int32 code = 1;
+  string message = 2;
+  message Data {
+    repeated Card cards = 1;
+    int32 has_more = 2;
+    int64 next_offset = 3;
+  }
+  Data data = 3;
+}
+
+message RelationModifyResponse {
+  int32 code = 1;
+  string message = 2;
+  int64 ttl = 3;
+}
+
+message GetAttentionListResponse {
+  int32 code = 1;
+  string message = 2;
+  message Data {
+    repeated int64 list = 1;
+  }
+  Data data = 3;
+}
+
+message WebInterfaceNavResponse {
+  int32 code = 1;
+  string message = 2;
+  int64 ttl = 3;
+  message Data {
+    message LevelInfo {
+      int32 current_level = 1;
+    }
+    message VipLabel {
+      string text = 1;
+    }
+    message WbiImg {
+      string img_url = 1;
+      string sub_url = 2;
+    }
+    bool isLogin = 1;
+    int64 mid = 2;
+    string uname = 3;
+    LevelInfo level_info = 4;
+    VipLabel vip_label = 5;
+    WbiImg wbi_img = 6;
+  }
+  Data data = 4;
+}
+
+message CardWithImage {
+  message Item {
+    int64 id = 1;
+    string title = 2;
+    string description = 3;
+    string category = 4;
+    message Picture {
+      string img_src = 1;
+      int32 img_width = 2;
+      int32 img_height = 3;
+      float img_size = 4;
+    }
+    repeated Picture pictures = 5;
+    int32 pictures_count = 6;
+    int64 upload_time = 7;
+  }
+  Item item = 1;
+}
+
+message CardWithOrig {
+  message Item {
+    string content = 1;
+    int64 timestamp = 2;
+    DynamicDescType orig_type = 3;
+    int64 reply = 4;
+    int64 miss = 5;
+    string tips = 6;
+  }
+  Item item = 1;
+  string origin = 2;
+  message OriginUser {
+    message Info {
+      int64 uid = 1;
+      string uname = 2;
+    }
+    Info info = 1;
+  }
+
+  OriginUser origin_user = 3;
+}
+
+message CardWithVideo {
+  string desc = 1;
+  int32 duration = 2;
+  string dynamic = 3;
+  int64 pubdate = 4;
+  string title = 5;
+  string tname = 6;
+  int32 videos = 7;
+  string pic = 8;
+  message Origin {
+    int64 uid = 1;
+    DynamicDescType type = 2;
+    string dynamic_id_str = 5;
+    string bvid = 9;
+  }
+  Origin origin = 9;
+}
+
+message CardTextOnly {
+  message Item {
+    int64 rp_id = 1;
+    int64 uid = 2;
+    string content = 3;
+    string ctrl = 4;
+    int64 timestamp = 7;
+    int32 reply = 8;
+  }
+  Item item = 1;
+}
+
+message CardWithPost {
+  string title = 1;
+  string summary = 2;
+  repeated string image_urls = 3;
+  string banner_url = 4;
+  int64 publish_time = 5;
+}
+
+message CardWithMusic {
+  string author = 1;
+  string cover = 2;
+  int64 ctime = 3;
+  int64 id = 4;
+  string intro = 5;
+  message Item {
+    string at_control = 1;
+  }
+  Item item = 6;
+  int64 playCnt = 7;
+  int64 replyCnt = 8;
+  string schema = 9;
+  string title = 10;
+  string typeInfo = 11;
+  int64 upId = 12;
+  string upper = 13;
+  string upperAvatar = 14;
+}
+
+// 包括动漫，纪录片，电影等，总之可以解析试试
+message CardWithMedia {
+  message ApiSeasonInfo {
+    int64 bgm_type = 1;
+    string cover = 2;
+    int64 is_finish = 3;
+    int64 season_id = 4;
+    string title = 5;
+    int64 total_count = 6;
+    int64 ts = 7;
+    string type_name = 8;
+  }
+  ApiSeasonInfo apiSeasonInfo = 1;
+  int64 bullet_count = 2;
+  string cover = 3;
+  int64 episode_id = 4;
+  string index = 5;
+  string index_title = 6;
+  string new_desc = 7;
+  //    int64 online_finish = 8;
+  int64 play_count = 9;
+  int64 reply_count = 10;
+  string url = 11;
+}
+
+message CardWithSketch {
+  message Vest {
+    int64 uid = 1;
+    string content = 2;
+  }
+  Vest vest = 1;
+  message Sketch {
+    string title = 1;
+    string desc_text = 2;
+    int32 biz_type = 3;
+    int64 sketch_id = 4;
+    string cover_url = 5;
+    message Tag {
+      string color = 1;
+      string name = 2;
+      int32 type = 3;
+    }
+    repeated Tag tags = 6;
+    string target_url = 7;
+  }
+  Sketch sketch = 2;
+}
+
+message CardWithLive {
+  int64 roomid = 1;
+  int64 uid = 2;
+  string uname = 3;
+  string cover = 4;
+  string title = 5;
+  string area_v2_name = 6;
+  LiveStatus live_status = 7;
+  RoundStatus round_status = 8;
+}
+
+message CardWithMylist {
+  string cover = 1;
+  int32 cover_type = 2;
+  int64 fid = 3;
+  int64 id = 4;
+  string intro = 5;
+  int32 media_count = 6;
+  int64 mid = 7;
+  bool sharable = 8;
+  string title = 9;
+  int32 type = 10;
+  message Upper {
+    string face = 1;
+    int32 followed = 2;
+    int64 mid = 3;
+    string name = 4;
+  }
+  Upper upper = 11;
+}
+
+// 可能是新版直播间 （x）
+// 发现是系统推荐的直播间，应该忽略吧？
+message CardWithLiveV2 {
+  message LivePlayInfo {
+    string cover = 1;
+    string title = 2;
+    int64 room_id = 3;
+    LiveStatus live_status = 4;
+    string link = 5;
+    int64 uid = 6;
+    int64 live_id = 7;
+    int64 area_id = 8;
+    string area_name = 9;
+    int64 parent_area_id = 10;
+    string parent_area_name = 11;
+    int64 room_type = 12;
+  }
+  LivePlayInfo live_play_info = 1;
+  int64 style = 2;
+  int64 type = 3;
+}
+
+message CardWithCourse {
+  message Badge  {
+    string text = 1;
+  }
+  message UpInfo {
+    string avatar = 1;
+    string name = 2;
+  }
+  Badge badge = 1;
+  string cover = 2;
+  int32 ep_count = 3;
+  string subtitle = 4;
+  string title = 5;
+  UpInfo up_info = 6;
+  int32 update_count = 7;
+  string update_info = 8;
+  string url = 9;
+}

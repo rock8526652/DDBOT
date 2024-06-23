@@ -1,0 +1,151 @@
+# 注意，填写时请把井号及后面的内容删除，并且冒号后需要加一个空格
+sign:
+  # 数据包的签名服务器列表，第一个作为主签名服务器，后续作为备用
+  # 兼容 https://github.com/fuqiuluo/unidbg-fetch-qsign
+  # 如果遇到 登录 45 错误, 或者发送信息风控的话需要填入一个或多个服务器
+  # 不建议设置过多，设置主备各一个即可，超过 5 个只会取前五个
+  # 示例:
+  # sign-servers:
+  #   - url: 'http://127.0.0.1:8080' # 本地签名服务器
+  #     key: "114514"  # 相应 key
+  #     authorization: "-"   # authorization 内容, 依服务端设置
+  #   - url: 'https://signserver.example.com' # 线上签名服务器
+  #     key: "114514"
+  #     authorization: "-"
+  #   ...
+  #
+  # 服务器可使用docker在本地搭建或者使用他人开放的服务
+  servers:
+    - url: ''  # 主签名服务器地址， 必填
+      key: '114514'  # 签名服务器所需要的apikey, 如果签名服务器的版本在1.1.0及以下则此项无效
+      authorization: ''   # authorization 内容, 依服务端设置，如 'Bearer xxxx'
+    - url: ''  # 备用
+      key: '114514'
+      authorization: ''
+
+  # 判断签名服务不可用（需要切换）的额外规则
+  # 0: 不设置 （此时仅在请求无法返回结果时判定为不可用）
+  # 1: 在获取到的 sign 为空 （若选此建议关闭 auto-register，一般为实例未注册但是请求签名的情况）
+  # 2: 在获取到的 sign 或 token 为空（若选此建议关闭 auto-refresh-token ）
+  rule-change-sign-server: 1
+
+  # 连续寻找可用签名服务器最大尝试次数
+  # 为 0 时会在连续 3 次没有找到可用签名服务器后保持使用主签名服务器，不再尝试进行切换备用
+  # 否则会在达到指定次数后 **退出** 主程序
+  max-check-count: 0
+  # 签名服务请求超时时间(s)
+  server-timeout: 60
+  # 如果签名服务器的版本在1.1.0及以下, 请将下面的参数改成true
+  # 建议使用 1.1.6 以上版本，低版本普遍半个月冻结一次
+  is-below-110: false
+  # 在实例可能丢失（获取到的签名为空）时是否尝试重新注册
+  # 为 true 时，在签名服务不可用时可能每次发消息都会尝试重新注册并签名。
+  # 为 false 时，将不会自动注册实例，在签名服务器重启或实例被销毁后需要重启 go-cqhttp 以获取实例
+  # 否则后续消息将不会正常签名。关闭此项后可以考虑开启签名服务器端 auto_register 避免需要重启
+  # 由于实现问题，当前建议关闭此项，推荐开启签名服务器的自动注册实例
+  auto-register: false
+  # 是否在 token 过期后立即自动刷新签名 token（在需要签名时才会检测到，主要防止 token 意外丢失）
+  # 独立于定时刷新
+  auto-refresh-token: false
+  # 定时刷新 token 间隔时间，单位为分钟, 建议 30~40 分钟, 不可超过 60 分钟
+  # 目前丢失token也不会有太大影响，可设置为 0 以关闭，推荐开启
+  refresh-interval: 40
+
+# 注意，填写时请把井号及后面的内容删除，并且冒号后需要加一个空格
+bot:
+  account:  # 你bot的qq号，不填则使用扫码登陆
+  password:  # 你bot的qq密码
+  commandPrefix: "/"     # bot触发命令的前缀，默认为单斜杠 /
+  onDisconnected: "1" # 设置掉线时处理方式，exit为退出，不填或者其他值为尝试重连
+  onJoinGroup:
+    rename: "【BOT】"     # BOT进群后自动改名，默认改名为“【bot】”，如果留空则不自动改名
+
+# 请注意，bot将使用您b站帐号的以下功能，建议使用新注册的小号：
+# 关注用户 / 取消关注用户 / 查看关注列表
+# 目前支持填cookie和账号两种方式 （选择任意一种方式即可，推荐使用账号密码）
+# 若使用账号
+    # 直接填入账号密码
+# 若使用cookie
+    # b站登陆后的cookie字段，从cookie中找到这两个填进去
+    # 警告：
+    # SESSDATA和bili_jct等价于您的帐号凭证
+    # 请绝对不要透露给他人，更不能上传至Github等公开平台
+    # 否则将导致您的帐号被盗
+# 请注意，订阅一个账号后，此处使用的b站账号将自动关注该账号
+bilibili:
+  SESSDATA:  # 你的b站cookie
+  bili_jct:  # 你的b站cookie 
+  interval: 25s # 直播状态和动态检测间隔，过快可能导致ip被暂时封禁
+  imageMergeMode: "auto" # 设置图片合并模式，支持 "auto" / "only9" / "off"
+                         # auto 为默认策略，存在比较刷屏的图片时会合并
+                         # only9 表示仅当恰好是9张图片的时候合并
+                         # off 表示不合并
+  hiddenSub: false    # 是否使用悄悄关注，默认不使用
+  unsub: false        # 是否自动取消关注，默认不取消，如果您的b站账号有多个bot同时使用，取消可能导致推送丢失
+  minFollowerCap: 0        # 设置订阅的b站用户需要满足至少有多少个粉丝，默认为0，设为-1表示无限制
+  disableSub: false        # 禁止ddbot去b站关注帐号，这意味着只能订阅帐号已关注的用户，或者在b站手动关注
+  onlyOnlineNotify: false  # 是否不推送Bot离线期间的动态和直播，默认为false表示需要推送，设置为true表示不推送
+
+pyProxyPool: # 代理池配置，py代理池 https://github.com/jhao104/proxy_pool
+  host: http://127.0.0.1:5010
+
+localProxyPool: # 代理池配置，固定代理
+  oversea: # 可翻墙的代理，用于访问YTB或pixiv
+    - 127.0.0.1:8888
+  mainland: # 不可翻墙的代理，用于直连国内网站
+    - 127.0.0.1:8888
+
+# 加入 twitcasting 部分即启用 tc 订阅功能  
+# 参阅 https://apiv2-doc.twitcasting.tv/#registration
+# 你需要到 https://twitcasting.tv/developer.php 新增一个 App
+# 填入所需资料后就可以获取 clientId 和 clientSecret
+# 详细: https://www.codenong.com/7d930656a7499340f14a/
+twitcasting:
+  clientId: abc
+  clientSecret: xyz
+  # 为防止风控，可选择性广播以下元素
+  broadcaster:
+    title: false # 标题 (有风控机会)
+    created: true # 开播时间
+    image: false # 直播封面 (墙内无法获取TC直播封面，建议有代理才开启
+  # 自定义名称显示，日文字太多很大机会风控
+  # 例如 "(如何显示) 正在直播""
+  nameStrategy: "name" # 如何显示名称, name= 显示用户名称, userid= 显示用户ID, both= 显示 "用户名称 (用户ID)"
+
+concern:
+  emitInterval: 5s # 订阅的刷新频率，5s表示每5秒刷新一个ID，过快可能导致ip被暂时封禁
+
+debug: # debug模式，只有以下群或qq号可以触发命令
+  group:
+    - 0
+  uin:
+    - 0
+
+message-marker: # 是否禁用自动已读功能，true为禁用，false为不禁用，默认为不禁用
+  disable: false
+
+qq-logs: # 是否启用在命令行内展示qq聊天内容，true为启用，false为禁用，默认为禁用
+  enable: false
+
+dispatch:
+  largeNotifyLimit: 50 # 巨量推送的判定配置，默认为50，当大于这个配置时，将增大推送延迟保证账号稳定
+notify:
+  parallel: 1          # 增加推送消息的并发配置，默认为1以优先保证账号稳定，当出现推送堆积的时候可以尝试调高
+
+template:       # 是否启用模板功能，true为启用，false为禁用，默认为禁用
+  enable: true # 需要了解模板请看模板文档
+  
+autoreply: # 自定义命令自动回复，自定义命令通过模板发送消息，且不支持任何参数，需要同时启用模板功能
+  group:   # 需要了解该功能请看模板文档
+    command: ["签到",]
+  private:
+    command: [ ]
+
+# 重定义命令前缀，优先级高于bot.commandPrefix
+# 如果有多个，可填写多项，prefix支持留空，可搭配自定义命令使用
+# 例如下面的配置为：<Q命令1> <命令2> </help>
+customCommandPrefix:
+  签到: ""
+  
+
+logLevel: info # 日志等级
