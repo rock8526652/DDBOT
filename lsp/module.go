@@ -524,6 +524,31 @@ func (l *Lsp) Serve(bot *bot.Bot) {
 		if err := l.LspStateManager.Muted(event.GroupCode, event.TargetUin, event.Time); err != nil {
 			logger.Errorf("Muted failed %v", err)
 		}
+		if event.TargetUin == localutils.GetBot().GetUin() {
+			data := map[string]interface{}{
+				"group_code":    event.GroupCode,
+				"member_code":   event.TargetUin,
+				"operator_code": event.OperatorUin,
+				"mute_duration": event.Time,
+			}
+			if gi := localutils.GetBot().FindGroup(event.GroupCode); gi != nil {
+				data["group_name"] = gi.Name
+				if fi := gi.FindMember(event.TargetUin); fi != nil {
+					data["member_name"] = fi.DisplayName()
+				}
+				if fi := gi.FindMember(event.OperatorUin); fi != nil {
+					data["operator_name"] = fi.DisplayName()
+				}
+			}
+			m, _ := template.LoadAndExec("trigger.group.bot_mute.tmpl", data)
+			if m != nil {
+				if admin := l.PermissionStateManager.ListAdmin(); len(admin) > 0 {
+					l.SendMsg(m, mmsg.NewPrivateTarget(admin[0]))
+				} else {
+					logger.Warn("未设置管理员，取消提示")
+				}
+			}
+		}
 	})
 
 	bot.PrivateMessageEvent.Subscribe(func(qqClient *client.QQClient, msg *message.PrivateMessage) {
