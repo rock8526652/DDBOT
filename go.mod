@@ -27,7 +27,7 @@ require (
 	github.com/nobuf/cas v0.0.0-20211227073117-1f46a292d04a
 	github.com/rifflock/lfshook v0.0.0-20180920164130-b9218ef580f5
 	github.com/robfig/cron/v3 v3.0.1
-	github.com/rock8526652/MiraiGo-Template v0.0.0-20240523140935-127028c505a5
+	github.com/rock8526652/MiraiGo-Template v0.0.0-20250123140935-7528321bce6a
 	github.com/samber/lo v1.38.1
 	github.com/shopspring/decimal v1.3.1
 	github.com/sirupsen/logrus v1.9.3
