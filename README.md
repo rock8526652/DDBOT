@@ -1,4 +1,4 @@
-# DDBOT
+# DDBOT该版本已经停止维护辣咩请转移到DDBOT Wsa
 
 [<img src="https://github.com/rock8526652/DDBOT/actions/workflows/ci.yml/badge.svg"/>](https://github.com/rock8526652/DDBOT/actions/workflows/ci.yml)
 [<img src="https://coveralls.io/repos/github/rock8526652/DDBOT/badge.svg?branch=master"/>](https://coveralls.io/github/rock8526652/DDBOT)
